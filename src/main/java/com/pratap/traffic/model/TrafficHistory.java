@@ -1,4 +1,4 @@
-package model;
+package com.pratap.traffic.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,8 +1,8 @@
-package service;
+package com.pratap.traffic.service;
 
-import exception.TrafficException;
-import model.Direction;
-import model.LightColor;
+import com.pratap.traffic.exception.TrafficException;
+import com.pratap.traffic.model.Direction;
+import com.pratap.traffic.model.LightColor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

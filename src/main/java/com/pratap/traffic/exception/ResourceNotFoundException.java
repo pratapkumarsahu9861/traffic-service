@@ -1,4 +1,4 @@
-package exception;
+package com.pratap.traffic.exception;
 
 public class ResourceNotFoundException extends RuntimeException {
 

@@ -1,4 +1,4 @@
-package model;
+package com.pratap.traffic.model;
 import java.time.LocalDateTime;
 
 public class TrafficState {

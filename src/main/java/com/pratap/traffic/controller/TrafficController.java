@@ -1,11 +1,10 @@
-package controller;
+package com.pratap.traffic.controller;
 
-import dto.ChangeSignalRequest;
+import com.pratap.traffic.service.TrafficLightService;
+import com.pratap.traffic.dto.ChangeSignalRequest;
 import jakarta.validation.Valid;
-import model.TrafficCommand;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import service.TrafficLightService;
 
 @RestController
 @RequestMapping("/traffic")

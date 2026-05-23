@@ -1,10 +1,10 @@
-package dto;
+package com.pratap.traffic.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import model.Direction;
-import model.LightColor;
+import com.pratap.traffic.model.Direction;
+import com.pratap.traffic.model.LightColor;
 
 @Data
 public class ChangeSignalRequest {

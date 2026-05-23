@@ -1,4 +1,4 @@
-package model;
+package com.pratap.traffic.model;
 
 public class TrafficCommand {
     private Direction direction;

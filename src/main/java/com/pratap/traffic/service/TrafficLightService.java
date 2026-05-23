@@ -1,20 +1,20 @@
-package service;
-
-import exception.ResourceNotFoundException;
-import exception.TrafficException;
-import model.*;
-import org.springframework.stereotype.Service;
+package com.pratap.traffic.service;
+import com.pratap.traffic.exception.ResourceNotFoundException;
+import com.pratap.traffic.exception.TrafficException;
+import com.pratap.traffic.model.Direction;
+import com.pratap.traffic.model.Intersection;
+import com.pratap.traffic.model.LightColor;
+import com.pratap.traffic.model.TrafficHistory;
 
 import jakarta.annotation.PostConstruct;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 @Service
 public class TrafficLightService {
-
     private final Map<String, Intersection> intersections =
             new ConcurrentHashMap<>();
 
