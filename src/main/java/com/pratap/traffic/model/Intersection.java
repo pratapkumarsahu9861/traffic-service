@@ -12,5 +12,5 @@ import java.util.Map;
 public class Intersection {
     private String intersectionId;
 
-    private Map<Direction, LightColor> signalStates;
+    private Map<String, String> signalStates;
 }

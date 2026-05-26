@@ -2,19 +2,21 @@ package com.pratap.traffic.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Builder
 @AllArgsConstructor
+@Data
 public class TrafficHistory {
     private String intersectionId;
 
-    private Direction direction;
+    private String direction;
 
-    private LightColor previousColor;
+    private String previousColor;
 
-    private LightColor currentColor;
+    private String currentColor;
 
     private LocalDateTime timestamp;
 }

@@ -1,19 +1,21 @@
 package com.pratap.traffic.service;
 import com.pratap.traffic.exception.ResourceNotFoundException;
 import com.pratap.traffic.exception.TrafficException;
-import com.pratap.traffic.model.Direction;
 import com.pratap.traffic.model.Intersection;
-import com.pratap.traffic.model.LightColor;
 import com.pratap.traffic.model.TrafficHistory;
 
+import com.pratap.traffic.util.ApplicationConstant;
 import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class TrafficLightService {
     private final Map<String, Intersection> intersections =
             new ConcurrentHashMap<>();
@@ -26,12 +28,12 @@ public class TrafficLightService {
     @PostConstruct
     public void init() {
 
-        Map<Direction, LightColor> initialState =
-                new EnumMap<>(Direction.class);
+        Map<String, String> initialState = new HashMap<>();
 
-        for (Direction direction : Direction.values()) {
-            initialState.put(direction, LightColor.RED);
+        for(String direction : ApplicationConstant.directionList) {
+            initialState.put(direction, ApplicationConstant.RED);
         }
+
 
         intersections.put(
                 "MAIN_JUNCTION",
@@ -42,8 +44,8 @@ public class TrafficLightService {
 
     public synchronized void changeSignal(
             String intersectionId,
-            Direction direction,
-            LightColor newColor) {
+            String direction,
+            String newColor) {
 
         if (paused) {
             throw new TrafficException(
@@ -63,7 +65,7 @@ public class TrafficLightService {
                 direction,
                 newColor);
 
-        LightColor previous =
+        String previous =
                 intersection.getSignalStates()
                         .get(direction);
 
@@ -81,26 +83,51 @@ public class TrafficLightService {
 
     private void validateGreenConflict(
             Intersection intersection,
-            Direction direction,
-            LightColor color) {
+            String direction,
+            String color) {
 
-        if (color != LightColor.GREEN) {
-            return;
+        if (!ApplicationConstant.lightColorList.contains(color)) {
+            throw new TrafficException("Invalid color "+ color);
+        }
+        if (!ApplicationConstant.directionList.contains(direction)) {
+            throw new TrafficException("Invalid Direction "+ direction);
         }
 
-        boolean anotherGreen =
+        if (!color.equals(ApplicationConstant.GREEN)) {
+            return;
+        }
+        Map<String, String> states = intersection.getSignalStates();
+        
+        Map<String, String> greenSignals =
                 intersection.getSignalStates()
                         .entrySet()
                         .stream()
-                        .anyMatch(entry ->
-                                entry.getKey() != direction
-                                        && entry.getValue()
-                                        == LightColor.GREEN);
-
-        if (anotherGreen) {
-            throw new TrafficException(
-                    "Another direction is already GREEN");
+                        .filter(entry -> entry.getValue().equals(ApplicationConstant.GREEN))
+                        .collect(Collectors.toMap(
+                                Map.Entry::getKey,
+                                Map.Entry::getValue
+                        ));
+        if (greenSignals.isEmpty()) {
+           return;
         }
+        Set<String> direct = greenSignals.keySet();
+
+        if (direction.equals(ApplicationConstant.EAST) || direction.equals(ApplicationConstant.WEST)) {
+            if (direct.contains(ApplicationConstant.EAST)
+                    || direct.contains(ApplicationConstant.WEST)) {
+                throw new TrafficException(
+                        "New Direction can't be EAST or WEST.");
+
+            }
+        } else if (direction.equals(ApplicationConstant.NORTH) || direction.equals(ApplicationConstant.SOUTH)) {
+            if (direct.contains(ApplicationConstant.NORTH)
+                    || direct.contains(ApplicationConstant.SOUTH)) {
+                throw new TrafficException(
+                        "New Direction can't be NORTH or SOUTH.");
+
+            }
+        }
+
     }
 
     public Collection<Intersection> getAllIntersections() {
