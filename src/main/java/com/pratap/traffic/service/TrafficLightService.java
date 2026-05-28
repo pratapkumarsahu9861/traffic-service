@@ -110,20 +110,20 @@ public class TrafficLightService {
         if (greenSignals.isEmpty()) {
            return;
         }
-        Set<String> direct = greenSignals.keySet();
+        Set<String> greenSignalExist = greenSignals.keySet();
 
         if (direction.equals(ApplicationConstant.EAST) || direction.equals(ApplicationConstant.WEST)) {
-            if (direct.contains(ApplicationConstant.EAST)
-                    || direct.contains(ApplicationConstant.WEST)) {
+            if (greenSignalExist.contains(ApplicationConstant.NORTH)
+                    || greenSignalExist.contains(ApplicationConstant.SOUTH)) {
                 throw new TrafficException(
-                        "New Direction can't be EAST or WEST.");
+                        "WEST/WEST cannnot be GREEN when NORTH/SOUTH is green");
 
             }
         } else if (direction.equals(ApplicationConstant.NORTH) || direction.equals(ApplicationConstant.SOUTH)) {
-            if (direct.contains(ApplicationConstant.NORTH)
-                    || direct.contains(ApplicationConstant.SOUTH)) {
+            if (greenSignalExist.contains(ApplicationConstant.EAST)
+                    || greenSignalExist.contains(ApplicationConstant.WEST)) {
                 throw new TrafficException(
-                        "New Direction can't be NORTH or SOUTH.");
+                        "NORTH/SOUTH cannnot be GREEN when EAST/WEST is green");
 
             }
         }
